@@ -12,13 +12,26 @@
     let notes: Note[] = $state([]);
 
     onMount(async () => {
-        notes = (await fetch('/api/notes', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-        }).then((res) => res.json())) as Note[];
+        const token = localStorage.getItem('token') || '';
+        const userId = localStorage.getItem('userId') || '';
+        if (!token) return;
+
+        try {
+            const res = await fetch('/api/notes/get', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: token,
+                    'authorization-id': userId,
+                },
+            });
+            if (res.ok) {
+                const data = await res.json();
+                notes = data.notes || [];
+            }
+        } catch (err) {
+            console.error('Failed to load notes:', err);
+        }
     });
 
     let editorOpen = $state(false);
