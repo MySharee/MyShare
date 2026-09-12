@@ -21,26 +21,6 @@
         }).then((res) => res.json())) as Note[];
     });
 
-    async function postNote(note: Note) {
-        const res = await fetch('/api/notes/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-            body: JSON.stringify(note),
-        });
-        if (!res.ok) {
-            try {
-                const errorData = await res.json();
-                return { success: false, message: errorData.message || 'Failed to create note' };
-            } catch (error) {
-                return { success: false, message: 'Failed to create note', error };
-            }
-        }
-        return { success: true, note: (await res.json()) as Note };
-    }
-
     let editorOpen = $state(false);
     let showSidebar = $state(false);
     function toggleSidebar() {
@@ -69,5 +49,9 @@
     {/if}
 </main>
 {#if editorOpen}
-    <Editor />
+    <Editor
+        bind:open={editorOpen}
+        onclose={() => (editorOpen = false)}
+        oncreated={(note) => (notes = [note, ...notes])}
+    />
 {/if}

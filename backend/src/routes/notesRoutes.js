@@ -38,7 +38,7 @@ router.post('/notes/create', verifyToken, async (req, res) => {
             userId,
             title,
             content,
-            file,
+            file: file || null,
             tags: serializedTags,
             visibility,
         });
