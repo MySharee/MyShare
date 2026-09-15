@@ -69,7 +69,7 @@
                 const data = await response.json();
 
                 localStorage.setItem('token', data.token);
-                goto('/');
+                goto(resolve('/'));
             }
         } catch (error) {
             console.error('Error posting to server:', error);
