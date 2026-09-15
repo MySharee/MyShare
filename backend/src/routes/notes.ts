@@ -4,7 +4,6 @@ import patchNote from '../controllers/notes/patchNote';
 import getNoteById from '../controllers/notes/getNoteById';
 import getNotes from '../controllers/notes/getNotes';
 
-
 const router = express.Router();
 
 router.get('/', getNotes);

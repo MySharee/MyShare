@@ -8,7 +8,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(ErrorHandler);
 
-
 const apiRouter = express.Router();
 
 import authRouter from './routes/auth';
