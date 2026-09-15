@@ -1,71 +1,17 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    interface Tag {
-        text: string;
-        color: string;
-    }
+    import { fade } from 'svelte/transition';
 
-    interface Note {
-        id: number;
-        title: string;
-        content: string;
-        visibility: boolean;
-        tags: Tag[];
-        file?: string | null;
-        author?: string;
-    }
-
-    let myNotes = $state<Note[]>([]);
-    let publicNotes = $state<Note[]>([]);
-    let activeTab = $state<'notes' | 'public' | 'settings'>('notes'); // work in progress
-    // let isLoadingMyNotes = $state(false);
-    // let isLoadingPublicNotes = $state(false);
-
-    async function loadMyNotes() {
-        const token = localStorage.getItem('token');
-        const userId = localStorage.getItem('userId');
-        if (!token) return;
-
-        //   isLoadingMyNotes = true;
-        try {
-            const res = await fetch('/api/notes/get', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: token,
-                    'authorization-id': userId || '',
-                },
-            });
-            if (res.ok) {
-                const data = await res.json();
-                myNotes = data.notes || [];
-            }
-        } catch (err) {
-            console.error('Failed to load user notes:', err);
-        } finally {
-            //    isLoadingMyNotes = false;
-        }
-    }
-
-    async function loadPublicNotes() {
-        //   isLoadingPublicNotes = true;
-        try {
-            const res = await fetch('/api/notes/public');
-            if (res.ok) {
-                const data = await res.json();
-                publicNotes = data.notes || [];
-            }
-        } catch (err) {
-            console.error('Failed to load public notes:', err);
-        } finally {
-            //  isLoadingPublicNotes = false;
-        }
-    }
-
-    onMount(() => {
-        loadMyNotes();
-        loadPublicNotes();
-    });
+    let {
+        activeTab = $bindable('notes'),
+        searchQuery = $bindable(''),
+        myNotesCount = 0,
+        publicNotesCount = 0,
+    }: {
+        activeTab?: 'notes' | 'public' | 'settings';
+        searchQuery?: string;
+        myNotesCount?: number;
+        publicNotesCount?: number;
+    } = $props();
 </script>
 
 <div class="w-full max-w-6xl flex flex-col items-center gap-6">
@@ -73,34 +19,40 @@
         <div class="tabs tabs-lifted tabs-lg w-full sm:w-auto">
             <button
                 type="button"
-                class="tab text-base sm:text-lg font-bold h-14 [--tab-bg:var(--color-base-300)] {activeTab ===
+                class="tab text-base sm:text-lg font-bold h-14 cursor-pointer transition-all duration-200 active:scale-95 hover:opacity-90 [--tab-bg:var(--color-base-300)] {activeTab ===
                 'notes'
                     ? 'tab-active'
-                    : ''}"
+                    : 'opacity-70 hover:opacity-100'}"
                 onclick={() => (activeTab = 'notes')}
             >
                 📝 My Notes
-                <span class="badge badge-sm badge-primary ml-2">{myNotes.length}</span>
+                <span
+                    class="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-primary/20 text-white ml-2 transition-transform duration-200 {activeTab === 'notes' ? 'scale-105' : 'scale-95 opacity-80'}"
+                    >{myNotesCount}</span
+                >
             </button>
 
             <button
                 type="button"
-                class="tab text-base sm:text-lg font-bold h-14 [--tab-bg:var(--color-base-300)] {activeTab ===
+                class="tab text-base sm:text-lg font-bold h-14 cursor-pointer transition-all duration-200 active:scale-95 hover:opacity-90 [--tab-bg:var(--color-base-300)] {activeTab ===
                 'public'
                     ? 'tab-active'
-                    : ''}"
+                    : 'opacity-70 hover:opacity-100'}"
                 onclick={() => (activeTab = 'public')}
             >
                 🌐 Instance Notes
-                <span class="badge badge-sm badge-secondary ml-2">{publicNotes.length}</span>
+                <span
+                    class="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-primary/20 text-white ml-2 transition-transform duration-200 {activeTab === 'public' ? 'scale-105' : 'scale-95 opacity-80'}"
+                    >{publicNotesCount}</span
+                >
             </button>
 
             <button
                 type="button"
-                class="tab text-base sm:text-lg font-bold h-14 [--tab-bg:var(--color-base-300)] {activeTab ===
+                class="tab text-base sm:text-lg font-bold h-14 cursor-pointer transition-all duration-200 active:scale-95 hover:opacity-90 [--tab-bg:var(--color-base-300)] {activeTab ===
                 'settings'
                     ? 'tab-active'
-                    : ''}"
+                    : 'opacity-70 hover:opacity-100'}"
                 onclick={() => (activeTab = 'settings')}
             >
                 ⚙️ Settings
@@ -108,13 +60,15 @@
         </div>
 
         {#if activeTab !== 'settings'}
-            <div class="w-full sm:w-72">
+            <div class="w-full sm:w-72" transition:fade={{ duration: 150 }}>
                 <input
                     type="text"
                     placeholder="Search notes..."
-                    class="input input-bordered input-sm sm:input-md w-full bg-base-200/60 backdrop-blur-sm"
+                    bind:value={searchQuery}
+                    class="input input-bordered input-sm sm:input-md w-full bg-base-200/60 backdrop-blur-sm transition-all duration-200 focus:scale-[1.02]"
                 />
             </div>
         {/if}
     </div>
 </div>
+

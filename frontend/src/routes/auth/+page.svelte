@@ -7,6 +7,7 @@
 
     import myshare_black from '$lib/assets/myshare_black.png';
     import myshare_white from '$lib/assets/myshare_white.png';
+    import Divider from '$lib/components/Divider.svelte';
 
     let email: string = $state('');
     let username: string = $state('');
@@ -14,6 +15,7 @@
     let traceback: string | null = $state(null);
 
     let authType: 'login' | 'register' = $state('login');
+    let isDark = $derived(mode.current === 'dark');
 
     async function postToServer() {
         const userData = {
@@ -21,6 +23,7 @@
             username,
             password,
         };
+
         try {
             if (authType === 'register') {
                 const response = await fetch('/api/users', {
@@ -30,6 +33,7 @@
                     },
                     body: JSON.stringify(userData),
                 });
+
                 if (!response.ok) {
                     if (response.status === 400) {
                         const errorData = await response.json();
@@ -39,6 +43,7 @@
                     }
                     return;
                 }
+
                 const responseData = await response.json();
                 localStorage.setItem('token', responseData.token);
                 goto(resolve('/'));
@@ -60,11 +65,11 @@
                     }
                     return;
                 }
+
                 const data = await response.json();
 
                 localStorage.setItem('token', data.token);
-                // eslint-disable-next-line
-                goto('/');
+                goto(resolve('/'));
             }
         } catch (error) {
             console.error('Error posting to server:', error);
@@ -74,61 +79,81 @@
 </script>
 
 <div
-    class="hero bg-base-200 min-h-screen flex flex-col justify-center items-center p-4 relative overflow-hidden"
+    class={[
+        'hero min-h-screen flex flex-col justify-center items-center p-4 relative overflow-hidden transition-colors duration-200',
+        isDark ? 'bg-spooky-black text-base-content' : 'bg-space-gray text-base-content',
+    ].join(' ')}
 >
     <div class="flex flex-col gap-4 items-center relative z-10">
         <div class="card-scene w-96">
             <div class="card-flipper" class:is-flipped={authType === 'register'}>
                 <div
-                    class="card-face card-front card card-border bg-base-300/80 backdrop-blur-2xl border-base-100 w-full shadow-xl"
+                    class={[
+                        'card-face card-front card border w-full shadow-xl rounded-lg backdrop-blur-2xl transition-colors duration-200',
+                        isDark
+                            ? 'bg-light-black/20 border-space-gray/30'
+                            : 'bg-white/70 border-black/10',
+                    ].join(' ')}
                     inert={authType === 'register'}
                 >
                     <div class="card-body">
                         <div class="flex items-center gap-2.5 pb-2">
                             <img
-                                src={mode.current == 'dark' ? myshare_white : myshare_black}
-                                class="h-8 w-8 object-contain"
-                                alt="myshare logo"
+                                src={isDark ? myshare_white : myshare_black}
+                                class="h-10 w-10 object-contain"
+                                alt="MyShare logo"
                             />
+
                             <h2 class="text-2xl font-bold">Login</h2>
                         </div>
 
-                        <label class="input w-full mt-2 bg-base-200/60 backdrop-blur-sm">
+                        <label
+                            class={[
+                                'input w-full mt-2 backdrop-blur-sm',
+                                isDark ? 'bg-base-200/60' : 'bg-base-200/80',
+                            ].join(' ')}
+                        >
                             <svg
-                                class="h-[1em] opacity-50"
                                 xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
                                 viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-6"
+                                aria-hidden="true"
                             >
-                                <g
-                                    stroke-linejoin="round"
+                                <path
                                     stroke-linecap="round"
-                                    stroke-width="2.5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                                </g>
+                                    stroke-linejoin="round"
+                                    d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                                />
                             </svg>
+
                             <input id="email" type="email" placeholder="Email" bind:value={email} />
                         </label>
-                        <label class="input w-full mt-2 bg-base-200/60 backdrop-blur-sm">
+
+                        <label
+                            class={[
+                                'input w-full mt-2 backdrop-blur-sm',
+                                isDark ? 'bg-base-200/60' : 'bg-base-200/80',
+                            ].join(' ')}
+                        >
                             <svg
-                                class="h-[1em] opacity-50"
                                 xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
                                 viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-6"
+                                aria-hidden="true"
                             >
-                                <g
-                                    stroke-linejoin="round"
+                                <path
                                     stroke-linecap="round"
-                                    stroke-width="2.5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                </g>
+                                    stroke-linejoin="round"
+                                    d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+                                />
                             </svg>
+
                             <input
                                 id="pw"
                                 type="password"
@@ -136,8 +161,12 @@
                                 bind:value={password}
                             />
                         </label>
+
                         <button
-                            class="btn btn-primary mt-4 shadow-lg shadow-primary/20"
+                            class={[
+                                'btn mt-4 shadow-lg shadow-primary/20 bg-ms-main',
+                                !isDark && 'text-white',
+                            ]}
                             style="padding: 20px"
                             id="login"
                             type="submit"
@@ -145,15 +174,19 @@
                         >
                             Login
                         </button>
+
                         {#if traceback && authType === 'login'}
                             <p class="text-red-600 dark:text-red-400 text-center mt-2">
                                 {traceback}
                             </p>
                         {/if}
-                        <div class="divider"></div>
+
+                        <Divider />
+
                         <div class="text-center">
                             <p class="text-center">
                                 Don't have an account?
+
                                 <button
                                     type="button"
                                     class="link link-primary inline p-0 bg-transparent border-0 cursor-pointer"
@@ -170,36 +203,47 @@
                 </div>
 
                 <div
-                    class="card-face card-back card card-border bg-base-300/80 backdrop-blur-2xl border-base-100 w-full shadow-xl"
+                    class={[
+                        'card-face card-back card border w-full shadow-xl rounded-lg backdrop-blur-2xl transition-colors duration-200',
+                        isDark
+                            ? 'bg-light-black/20 border-space-gray/30'
+                            : 'bg-white/70 border-black/10',
+                    ].join(' ')}
                     inert={authType === 'login'}
                 >
                     <div class="card-body">
                         <div class="flex items-center gap-2.5 pb-2">
                             <img
-                                src={mode.current == 'dark' ? myshare_white : myshare_black}
-                                class="h-8 w-8 object-contain"
-                                alt="myshare logo"
+                                src={isDark ? myshare_white : myshare_black}
+                                class="h-10 w-10 object-contain"
+                                alt="MyShare logo"
                             />
+
                             <h2 class="text-2xl font-bold">Register</h2>
                         </div>
 
-                        <label class="input w-full mt-2 bg-base-200/60 backdrop-blur-sm">
+                        <label
+                            class={[
+                                'input w-full mt-2 backdrop-blur-sm',
+                                isDark ? 'bg-base-200/60' : 'bg-base-200/80',
+                            ].join(' ')}
+                        >
                             <svg
-                                class="h-[1em] opacity-50"
                                 xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
                                 viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-6"
+                                aria-hidden="true"
                             >
-                                <g
-                                    stroke-linejoin="round"
+                                <path
                                     stroke-linecap="round"
-                                    stroke-width="2.5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                                </g>
+                                    stroke-linejoin="round"
+                                    d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                                />
                             </svg>
+
                             <input
                                 id="email-register"
                                 type="email"
@@ -207,46 +251,58 @@
                                 bind:value={email}
                             />
                         </label>
-                        <label class="input w-full mt-2 bg-base-200/60 backdrop-blur-sm">
+
+                        <label
+                            class={[
+                                'input w-full mt-2 backdrop-blur-sm',
+                                isDark ? 'bg-base-200/60' : 'bg-base-200/80',
+                            ].join(' ')}
+                        >
                             <svg
-                                class="h-[1em] opacity-50"
                                 xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
                                 viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-6"
+                                aria-hidden="true"
                             >
-                                <g
-                                    stroke-linejoin="round"
+                                <path
                                     stroke-linecap="round"
-                                    stroke-width="2.5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
-                                </g>
+                                    stroke-linejoin="round"
+                                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                                />
                             </svg>
+
                             <input
                                 id="username-register"
                                 placeholder="Username"
                                 bind:value={username}
                             />
                         </label>
-                        <label class="input w-full mt-2 bg-base-200/60 backdrop-blur-sm">
+
+                        <label
+                            class={[
+                                'input w-full mt-2 backdrop-blur-sm',
+                                isDark ? 'bg-base-200/60' : 'bg-base-200/80',
+                            ].join(' ')}
+                        >
                             <svg
-                                class="h-[1em] opacity-50"
                                 xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
                                 viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-6"
+                                aria-hidden="true"
                             >
-                                <g
-                                    stroke-linejoin="round"
+                                <path
                                     stroke-linecap="round"
-                                    stroke-width="2.5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                </g>
+                                    stroke-linejoin="round"
+                                    d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0-2.25 2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+                                />
                             </svg>
+
                             <input
                                 id="pw-register"
                                 type="password"
@@ -254,8 +310,9 @@
                                 bind:value={password}
                             />
                         </label>
+
                         <button
-                            class="btn btn-primary mt-4 shadow-lg shadow-primary/20"
+                            class="btn mt-4 shadow-xl shadow-primary/20 bg-ms-main"
                             style="padding: 20px"
                             id="register-btn"
                             type="submit"
@@ -263,15 +320,19 @@
                         >
                             Register
                         </button>
+
                         {#if traceback && authType === 'register'}
                             <p class="text-red-600 dark:text-red-400 text-center mt-2">
                                 {traceback}
                             </p>
                         {/if}
-                        <div class="divider"></div>
+
+                        <Divider />
+
                         <div class="text-center">
                             <p class="text-center">
                                 Already have an account?
+
                                 <button
                                     type="button"
                                     class="link link-primary inline p-0 bg-transparent border-0 cursor-pointer"
