@@ -36,6 +36,7 @@
         "typeorm": "^0.3.20"
     },
     "devDependencies": {
+        "@types/cookie-parser": "^1.4.10",
         "@types/express": "^5.0.6",
         "@types/node": "^26.5.1",
         "@vitest/coverage-v8": "^5.0.0",
@@ -44,7 +45,6 @@
         "supertest": "^7.2.2",
         "tailwindcss": "^4.0.9",
         "ts-node": "^10.9.2",
-        "typescript": "^7.0.2",
         "vitest": "^5.0.0"
     }
 }

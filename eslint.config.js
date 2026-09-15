@@ -13,14 +13,19 @@ export default tseslint.config(
             '**/.svelte-kit/**',
             '**/coverage/**',
             '**/*.min.js',
+            '**/legacy/**',
         ],
     },
 
-    eslint.configs.recommended,
+    ...tseslint.configs.recommended.map((config) => ({
+        ...config,
+        files: ['**/*.ts'],
+    })),
 
     {
-        files: ['backend/**/*.js'],
+        files: ['backend/**/*.ts'],
         languageOptions: {
+            parser: tseslint.parser,
             ecmaVersion: 'latest',
             sourceType: 'module',
             globals: {
@@ -29,7 +34,7 @@ export default tseslint.config(
         },
         rules: {
             'no-console': 'off',
-            'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+            '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
             'prefer-const': 'error',
         },
     },
