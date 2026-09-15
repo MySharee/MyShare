@@ -6,7 +6,6 @@
         ondelete,
     }: {
         note: Note;
-        // eslint-disable-next-line no-unused-vars
         ondelete?: (id: number) => void;
     } = $props();
 
@@ -111,7 +110,7 @@
 
             {#if Array.isArray(note.tags) && note.tags.length > 0}
                 <div class="flex flex-wrap gap-1.5 pt-2 border-t border-base-content/5">
-                    {#each note.tags as tag}
+                    {#each note.tags as tag (tag.id) }
                         <span class="badge badge-sm opacity-75">
                             {typeof tag === 'string' ? tag : '#' + tag.text}
                         </span>

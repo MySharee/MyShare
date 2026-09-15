@@ -10,7 +10,6 @@
     }: {
         open?: boolean;
         onclose?: () => void;
-        // eslint-disable-next-line no-unused-vars
         oncreated?: (note: Note) => void;
     } = $props();
 
