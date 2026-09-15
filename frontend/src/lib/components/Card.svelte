@@ -112,8 +112,8 @@
             {#if Array.isArray(note.tags) && note.tags.length > 0}
                 <div class="flex flex-wrap gap-1.5 pt-2 border-t border-base-content/5">
                     {#each note.tags as tag}
-                        <span class="badge badge-sm badge-outline opacity-75">
-                            {typeof tag === 'string' ? tag : tag.text}
+                        <span class="badge badge-sm opacity-75">
+                            {typeof tag === 'string' ? tag : '#' + tag.text}
                         </span>
                     {/each}
                 </div>
@@ -121,5 +121,3 @@
         </div>
     </div>
 </div>
-
-

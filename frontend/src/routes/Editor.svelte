@@ -22,14 +22,15 @@
     let title = $state('');
     let content = $state('');
     let currentTag = $state('');
+    let currentTagColor = $state('#a6ffda');
     let tags = $state<{ text: string; color?: string }[]>([]);
     let isSubmitting = $state(false);
     let errorMessage = $state('');
 
     function addTag() {
-        const trimmed = currentTag.trim();
+        const trimmed = currentTag.trim().replace(/^#+/, '');
         if (trimmed && !tags.some((t) => t.text.toLowerCase() === trimmed.toLowerCase())) {
-            tags = [...tags, { text: trimmed, color: '#a6ffda' }];
+            tags = [...tags, { text: trimmed, color: currentTagColor }];
             currentTag = '';
         }
     }
@@ -134,7 +135,6 @@
             class="bg-spooky-black border border-base-content/10 shadow-2xl rounded-2xl w-full max-w-3xl h-[80vh] max-h-[700px] flex flex-col overflow-hidden relative"
             transition:scale={{ duration: 300, start: 0.85, opacity: 0, easing: quintOut }}
         >
-
             <div class="font-bold text-2xl text-center m-[30px]">Create Note</div>
             <div class="m-[30px] mt-0">
                 <div class="font-bold text-left pb-1">Title:</div>
@@ -186,8 +186,8 @@
                 {#if tags.length > 0}
                     <div class="flex flex-wrap gap-2 pt-3">
                         {#each tags as t, index (t.text)}
-                            <span class="badge badge-primary gap-1 text-xs py-2 px-3">
-                                {t.text}
+                            <span class=" gap-1 text-xs py-2 px-3">
+                                #{t.text}
                                 <button
                                     type="button"
                                     class="hover:opacity-75 cursor-pointer ml-1"

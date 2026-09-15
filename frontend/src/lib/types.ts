@@ -8,4 +8,3 @@ export interface Note {
     author?: string;
     visibility?: boolean;
 }
-
