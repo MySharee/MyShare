@@ -64,7 +64,7 @@
                 </div>
 
                 <button class="btn btn-primary shadow-md shadow-primary/20 font-bold w-full">
-                    New Note
+                    Test Button
                 </button>
                 <Divider />
 

@@ -14,10 +14,6 @@
 
     async function handleDelete() {
         menuOpen = false;
-        if (ondelete) {
-            ondelete(note.id);
-            return;
-        }
 
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
@@ -36,7 +32,14 @@
                 }),
             });
             if (res.ok) {
-                window.location.reload();
+                if (ondelete) {
+                    ondelete(note.id);
+                } else {
+                    window.location.reload();
+                }
+            } else {
+                const data = await res.json().catch(() => null);
+                alert(data?.message || 'Failed to delete note.');
             }
         } catch (err) {
             console.error('Failed to delete note:', err);
@@ -48,9 +51,16 @@
     <div
         class="card bg-spooky-black backdrop-blur-2xl border border-space-gray/50 shadow-2xl w-full max-w-3xl rounded-lg relative z-10"
     >
-        <div class="card-body p-6 sm:p-4 flex flex-col gap-4">
+        <div class="card-body p-6 sm:p-4 flex flex-col gap-3">
             <div class="flex items-start justify-between gap-2">
-                <h2 class="text-2xl font-bold break-words flex-1">{note.title}</h2>
+                <div class="flex flex-col flex-1 min-w-0">
+                    <h2 class="text-2xl font-bold break-words">{note.title}</h2>
+                    {#if note.author}
+                        <span class="text-xs text-base-content/60 mt-0.5">
+                            by <span class="font-medium text-primary">{note.author}</span>
+                        </span>
+                    {/if}
+                </div>
                 <div class="relative shrink-0">
                     <button
                         type="button"
@@ -98,6 +108,16 @@
                 </div>
             </div>
             <p class="multiline">{note.content}</p>
+
+            {#if Array.isArray(note.tags) && note.tags.length > 0}
+                <div class="flex flex-wrap gap-1.5 pt-2 border-t border-base-content/5">
+                    {#each note.tags as tag}
+                        <span class="badge badge-sm badge-outline opacity-75">
+                            {typeof tag === 'string' ? tag : tag.text}
+                        </span>
+                    {/each}
+                </div>
+            {/if}
         </div>
     </div>
 </div>
