@@ -20,6 +20,7 @@ module.exports = new EntitySchema({
         },
         file: {
             type: 'varchar',
+            nullable: true,
         },
         tags: {
             type: 'text',
