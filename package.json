@@ -26,6 +26,7 @@
         "test:backend": "pnpm --dir backend test",
         "frontend": "pnpm --filter frontend",
         "backend": "pnpm --filter backend",
+        "backend:build": "pnpm --filter backend build",
         "frontend:dev": "pnpm --filter frontend dev",
         "frontend:build": "pnpm --filter frontend build",
         "frontend:preview": "pnpm --filter frontend preview",
