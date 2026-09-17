@@ -31,9 +31,11 @@
         "frontend:preview": "pnpm --filter frontend preview",
         "backend:dev": "pnpm --filter backend dev",
         "backend:start": "pnpm --filter backend start",
-        "db": "docker compose exec db",
-        "db:psql": "docker compose exec db psql",
-        "db:shell": "docker compose exec db sh"
+        "db": "docker compose up db -d",
+        "db:push": "pnpm --filter backend db:push",
+        "db:migrate": "pnpm --filter backend db:migrate",
+        "db:generate": "pnpm --filter backend db:generate",
+        "db:studio": "pnpm --filter backend db:studio"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",

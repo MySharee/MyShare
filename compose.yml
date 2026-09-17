@@ -44,6 +44,8 @@ services:
     db:
         image: mariadb
         restart: unless-stopped
+        ports:
+            - '${DB_PORT:-3306}:3306'
         environment:
             MARIADB_DATABASE: myshare
             MARIADB_USER: mariadb
