@@ -1,5 +1,5 @@
 allowBuilds:
-  '@parcel/watcher': true
-  argon2: true
-  bcrypt: true
-  esbuild: true
+    '@parcel/watcher': true
+    argon2: true
+    bcrypt: true
+    esbuild: true
