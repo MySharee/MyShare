@@ -45,11 +45,14 @@ importers:
         specifier: ^3.24.4
         version: 3.24.4(@types/node@26.5.1)
       nodemailer:
-        specifier: ^6.10.1
-        version: 6.10.1
+        specifier: ^10.0.10
+        version: 10.0.10
       path:
         specifier: ^0.12.7
         version: 0.12.7
+      qs:
+        specifier: 6.16.0
+        version: 6.16.0
     devDependencies:
       '@types/cookie-parser':
         specifier: ^1.4.10
@@ -1780,9 +1783,9 @@ packages:
     resolution: {integrity: sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==}
     hasBin: true
 
-  nodemailer@6.10.1:
-    resolution: {integrity: sha512-Z+iLaBGVaSjbIzQ4pX6XV41HrooLsQ10ZWPUehGmuantvzWoDVBnmsdUcOIDM1t+yPor5pDhVlDESgOMEGxhHA==}
-    engines: {node: '>=6.0.0'}
+  nodemailer@10.0.10:
+    resolution: {integrity: sha512-He9XskOFms62SyAKkLu8CcGcYHAo+BSHSsORI8s4PJH8qZgZY4L4lDfvyN0twvmbpyG+eGrxpyBlskj9d9rJ8A==}
+    engines: {node: '>=20.0.0'}
 
   nodemon@3.1.14:
     resolution: {integrity: sha512-jakjZi93UtB3jHMWsXL68FXSAosbLfY0In5gtKq3niLSkrWznrVBzXFNOEMJUfc9+Ke7SHWoAZsiMkNP3vq6Jw==}
@@ -3484,7 +3487,7 @@ snapshots:
 
   node-gyp-build@4.8.4: {}
 
-  nodemailer@6.10.1: {}
+  nodemailer@10.0.10: {}
 
   nodemon@3.1.14:
     dependencies:
